@@ -1,6 +1,6 @@
 'use strict'
 console.clear()
-const log = console.log
+global.log = console.log
 
 /* ======================================================== 
     IMPORT MODULES & PACKAGES
@@ -13,6 +13,7 @@ import { config } from 'dotenv'
 ========================================================= */
 import index from './routes/homeRoute.js'
 import configApp from './app.config.js'
+import apiRoute from './routes/apiRoute.js'
 
 /* ======================================================== 
     INIT APP
@@ -40,7 +41,7 @@ configApp(app)
     ROUTES
 ========================================================= */
 app.use('/', index)
-
+apiRoute(app)
 /* ======================================================== 
     LISTENTING
 ========================================================= */
