@@ -59,7 +59,8 @@ const apiRoute = (app, projects) => {
         .delete((req, res) => {
             let { project } = req.params
             project = project.replace(':', '')
-            const id = new ObjectID(req.params.id)
+            const id = new ObjectID(req.body.id)
+            // log(id)
 
             projects
                 .updateOne(
@@ -68,7 +69,7 @@ const apiRoute = (app, projects) => {
                     { new: true }
                 )
 
-                .then((data) => res.redirect(`/:${project}`))
+                .then((data) => res.redirect(`/${project}`))
                 .catch((err) => log(err))
         })
 }
