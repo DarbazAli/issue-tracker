@@ -7,6 +7,8 @@ global.log = console.log
 ========================================================= */
 import express from 'express'
 import { config } from 'dotenv'
+import mongodb from 'mongodb'
+const MongoClient = mongodb.MongoClient
 
 /* ======================================================== 
     CUSTOM MODULES
@@ -24,7 +26,7 @@ config() // dotenv
 /* ======================================================== 
     ENV VARAIBLES
 ========================================================= */
-const { PORT } = process.env
+const { PORT, MONGO_URI } = process.env
 
 /* ======================================================== 
     SETUP TEMPLATE ENGINE
@@ -38,10 +40,25 @@ app.set('view engine', 'pug')
 configApp(app)
 
 /* ======================================================== 
-    ROUTES
+    CONNECT TO DB
 ========================================================= */
-app.use('/', index)
-apiRoute(app)
+MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+    if (err) throw err
+    log('Connected to database')
+
+    const db = client.db('issue-tracker')
+    const issues = db.collection('issues')
+
+    issues.find().toArray((err, result) => {
+        if (err) throw err
+        // log(result)
+    })
+
+    // USE ROUTES AFTER CONNECTION
+    app.use('/', index)
+    apiRoute(app)
+})
+
 /* ======================================================== 
     LISTENTING
 ========================================================= */
