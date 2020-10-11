@@ -1,0 +1,10 @@
+
+if projects
+    ul
+        each item in projects
+            - var name= item.name
+            - var issues= item.issues.length
+
+            li
+                a(href=`/${name}`) #{name}
+                p #{issues} Issues
