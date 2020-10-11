@@ -13,7 +13,7 @@ const MongoClient = mongodb.MongoClient
 /* ======================================================== 
     CUSTOM MODULES
 ========================================================= */
-import index from './routes/homeRoute.js'
+import homeRoute from './routes/homeRoute.js'
 import configApp from './app.config.js'
 import apiRoute from './routes/apiRoute.js'
 import projectRoute from './routes/projectRoute.js'
@@ -51,7 +51,8 @@ MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     const projects = db.collection('projects')
 
     // USE ROUTES AFTER CONNECTION
-    app.use('/', index)
+    // app.use('/', index)
+    homeRoute(app, projects)
     apiRoute(app, projects)
     projectRoute(app, projects)
 })

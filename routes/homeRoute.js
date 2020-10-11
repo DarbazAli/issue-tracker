@@ -1,8 +1,11 @@
-import express from 'express'
-const router = express.Router()
+const homeRoute = (app, projects) => {
+    app.route('/').get((req, res) => {
+        projects.find().toArray((err, result) => {
+            if (err) throw err
+            log(result)
+            res.render('index', { projects: result })
+        })
+    })
+}
 
-router.route('/').get((req, res) => {
-    res.render('index', { title: 'Issue Tracker' })
-})
-
-export default router
+export default homeRoute
