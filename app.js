@@ -48,12 +48,12 @@ MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     log('Connected to database')
 
     const db = client.db('issue-tracker')
-    const issues = db.collection('issues')
+    const projects = db.collection('projects')
 
     // USE ROUTES AFTER CONNECTION
     app.use('/', index)
-    apiRoute(app, issues)
-    projectRoute(app, issues)
+    apiRoute(app, projects)
+    projectRoute(app, projects)
 })
 
 /* ======================================================== 
