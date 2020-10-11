@@ -2,24 +2,46 @@
 console.clear()
 const log = console.log
 
+/* ======================================================== 
+    IMPORT MODULES & PACKAGES
+========================================================= */
 import express from 'express'
 import { config } from 'dotenv'
 
-// custom modules
+/* ======================================================== 
+    CUSTOM MODULES
+========================================================= */
 import homeRoute from './routes/homeRoute.js'
+import configApp from './app.config.js'
 
-// init express app = main
+/* ======================================================== 
+    INIT APP
+========================================================= */
 const app = express()
 config() // dotenv
 
+/* ======================================================== 
+    ENV VARAIBLES
+========================================================= */
 const { PORT } = process.env
-app.listen(PORT, log(`Server running on PORT ${PORT}\n`))
 
-// setup template engine
+/* ======================================================== 
+    SETUP TEMPLATE ENGINE
+========================================================= */
 app.set('views', './views')
 app.set('view engine', 'pug')
 
-// serve static files
-app.use(express.static(process.cwd() + '/public'))
+/* ======================================================== 
+    APP SETTINGS
+========================================================= */
+configApp(app)
 
+/* ======================================================== 
+    ROUTES
+========================================================= */
 homeRoute(app)
+
+/* ======================================================== 
+    LISTENTING
+========================================================= */
+app.listen(PORT, log(`Server running on PORT ${PORT}\n`))
