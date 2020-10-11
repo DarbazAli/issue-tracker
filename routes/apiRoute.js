@@ -11,6 +11,11 @@ const apiRoute = (app, issues) => {
         ====================================*/
         .get((req, res) => {
             const { project } = req.params
+            issues.find().toArray((err, result) => {
+                if (err) throw err
+                // log(result)
+                res.json(result)
+            })
         })
 
         /*================================= 

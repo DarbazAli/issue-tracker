@@ -49,14 +49,9 @@ MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     const db = client.db('issue-tracker')
     const issues = db.collection('issues')
 
-    issues.find().toArray((err, result) => {
-        if (err) throw err
-        // log(result)
-    })
-
     // USE ROUTES AFTER CONNECTION
     app.use('/', index)
-    apiRoute(app)
+    apiRoute(app, issues)
 })
 
 /* ======================================================== 
