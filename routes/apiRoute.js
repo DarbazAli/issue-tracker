@@ -8,7 +8,9 @@ const apiRoute = (app, projects) => {
             POST ISSUES
         ====================================*/
         .post((req, res) => {
-            const { project } = req.params
+            let { project } = req.params
+            project = project.replace(':', '')
+
             const { title, text, creator, assignee, status } = req.body
 
             const newIssue = {
@@ -17,7 +19,7 @@ const apiRoute = (app, projects) => {
                 issue_text: text,
                 created_by: creator,
                 assigned_to: assignee || null,
-                status_text: status || null,
+                status_text: status == 'Open' ? true : false || null,
                 created_on: new Date().toUTCString(),
                 updated_on: new Date().toUTCString(),
             }
@@ -28,7 +30,8 @@ const apiRoute = (app, projects) => {
                 (err, doc) => {
                     if (err) throw err
                     // res.res.redirect(``)
-                    res.json(doc)
+                    // log(doc)
+                    res.json(doc.value)
                 }
             )
         })

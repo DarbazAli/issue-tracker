@@ -6,7 +6,7 @@ const homeRoute = (app, projects) => {
         .get((req, res) => {
             projects.find().toArray((err, result) => {
                 if (err) throw err
-                log(result)
+                // log(result)
                 res.render('index', { projects: result })
             })
         })
