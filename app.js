@@ -16,6 +16,7 @@ const MongoClient = mongodb.MongoClient
 import index from './routes/homeRoute.js'
 import configApp from './app.config.js'
 import apiRoute from './routes/apiRoute.js'
+import projectRoute from './routes/projectRoute.js'
 
 /* ======================================================== 
     INIT APP
@@ -52,6 +53,7 @@ MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     // USE ROUTES AFTER CONNECTION
     app.use('/', index)
     apiRoute(app, issues)
+    projectRoute(app, issues)
 })
 
 /* ======================================================== 
