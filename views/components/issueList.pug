@@ -1,0 +1,10 @@
+
+
+ul
+    each issue in issues
+        li
+            <b> #{issue.issue_title} </b>
+            p #{issue.issue_text}
+            p Created On: #{issue.created_on}
+
+            include ./deleteForm.pug

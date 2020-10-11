@@ -56,7 +56,21 @@ const apiRoute = (app, projects) => {
         /*================================= 
             DELETE ISSUES
         ====================================*/
-        .delete((req, res) => {})
+        .delete((req, res) => {
+            let { project } = req.params
+            project = project.replace(':', '')
+            const id = new ObjectID(req.params.id)
+
+            projects
+                .updateOne(
+                    { name: project },
+                    { $pull: { issues: { _id: id } } },
+                    { new: true }
+                )
+
+                .then((data) => res.redirect(`/:${project}`))
+                .catch((err) => log(err))
+        })
 }
 
 export default apiRoute
