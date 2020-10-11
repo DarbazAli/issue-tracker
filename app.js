@@ -11,7 +11,7 @@ import { config } from 'dotenv'
 /* ======================================================== 
     CUSTOM MODULES
 ========================================================= */
-import homeRoute from './routes/homeRoute.js'
+import index from './routes/homeRoute.js'
 import configApp from './app.config.js'
 
 /* ======================================================== 
@@ -39,7 +39,7 @@ configApp(app)
 /* ======================================================== 
     ROUTES
 ========================================================= */
-homeRoute(app)
+app.use('/', index)
 
 /* ======================================================== 
     LISTENTING

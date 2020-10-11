@@ -1,8 +1,8 @@
-const homeRoute = (app) => {
-    // create the home url
-    app.get('/', (req, res) => {
-        res.render('index', { title: 'Home', message: 'Hello There' })
-    })
-}
+import express from 'express'
+const router = express.Router()
 
-export default homeRoute
+router.route('/').get((req, res) => {
+    res.render('index', { title: 'Issue Tracker' })
+})
+
+export default router
