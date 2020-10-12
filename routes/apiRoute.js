@@ -41,7 +41,7 @@ const apiRoute = (app, projects) => {
         ====================================*/
         .get((req, res) => {
             const { project } = req.params
-            projects.find().toArray((err, result) => {
+            projects.findOne({ name: project }, (err, result) => {
                 if (err) throw err
                 // log(result)
                 res.json(result)
