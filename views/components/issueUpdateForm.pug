@@ -1,0 +1,18 @@
+form(action=`/api/issues/:${name}?_method=PUT`, method="post")
+    //- input(type="hidden", name="id" value=`${issue._id}`)
+
+    input(type="text" name="issue_id" placeholder="*id")
+    br
+    input(type="text" name="title" placeholder="(Opt) Issue title")
+    br
+    textarea(name="text", cols="30", rows="10" placeholder="(Opt) Text")
+    br
+    input(type="text" name="creator" placeholder="Created by")
+    br
+
+    input(type="text" name="assignee" placeholder="Assigned to")
+    br
+    input(type="text" name="status" placeholder="Status (Open or Closed)")
+    br
+
+    button(type="submit" class="button-primary") UPDATE

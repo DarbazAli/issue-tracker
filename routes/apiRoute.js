@@ -51,7 +51,32 @@ const apiRoute = (app, projects) => {
         /*================================= 
             PUT ISSUES
         ====================================*/
-        .put((req, res) => {})
+        .put((req, res) => {
+            let { project } = req.params
+            project = project.replace(':', '')
+            const id = new ObjectID(req.body.issue_id)
+
+            const { title, text, creator, assignee, status } = req.body
+
+            const updateIssue = {
+                issue_title: title,
+                issue_text: text,
+                created_by: creator,
+                assigned_to: assignee || null,
+                status_text: status == 'Open' ? true : false || null,
+                updated_on: new Date().toUTCString(),
+            }
+
+            projects.updateOne(
+                { name: project, _id: id },
+                { $set: updateIssue },
+                { new: true },
+                (err, docs) => {
+                    if (err) res.json(err)
+                    res.json(`Successfully updated ${id}`)
+                }
+            )
+        })
 
         /*================================= 
             DELETE ISSUES
