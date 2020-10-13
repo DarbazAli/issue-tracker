@@ -1,13 +1,14 @@
-const projectRoute = (app, projects) => {
+const projectRoute = (app, Project) => {
     app.route('/:project').get((req, res) => {
         const { project } = req.params
 
-        projects.findOne({ name: project }, (err, data) => {
-            if (err) log(err)
-            const issues = data != null ? data.issues : []
-            // log(issues)
-            res.render('project', { name: project, issues: issues })
-        })
+        Project.findOne({ name: project })
+            .then((data) => {
+                const issues = data.issues
+                log(issues)
+                res.render('project', { name: project, issues: issues })
+            })
+            .catch((err) => res.status(401).send(err))
     })
 }
 
