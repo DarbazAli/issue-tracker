@@ -1,4 +1,3 @@
-import { ObjectID } from 'mongodb'
 import mongoose from 'mongoose'
 const { Schema } = mongoose
 
@@ -13,7 +12,6 @@ const issueSchema = new Schema({
     updated_on: { type: Date },
 })
 const projectSchema = new Schema({
-    _id: ObjectID,
     name: String,
     created_on: { type: Date, default: Date.now },
     issues: [issueSchema],

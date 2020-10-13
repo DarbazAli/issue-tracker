@@ -8,6 +8,8 @@ global.log = console.log
 import express from 'express'
 import { config } from 'dotenv'
 import mongodb from 'mongodb'
+import mongoose from 'mongoose'
+
 const MongoClient = mongodb.MongoClient
 
 /* ======================================================== 
@@ -17,6 +19,7 @@ import homeRoute from './routes/homeRoute.js'
 import configApp from './app.config.js'
 import apiRoute from './routes/apiRoute.js'
 import projectRoute from './routes/projectRoute.js'
+import Project from './Project.js'
 
 /* ======================================================== 
     INIT APP
@@ -43,19 +46,21 @@ configApp(app)
 /* ======================================================== 
     CONNECT TO DB
 ========================================================= */
-MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
-    if (err) throw err
-    log('Connected to database')
 
-    const db = client.db('issue-tracker')
-    const projects = db.collection('projects')
+mongoose
+    .connect(MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
 
-    // USE ROUTES AFTER CONNECTION
-    // app.use('/', index)
-    homeRoute(app, projects)
-    apiRoute(app, projects)
-    projectRoute(app, projects)
-})
+    .then((client) => {
+        log('Connected to database')
+
+        homeRoute(app, Project)
+        projectRoute(app, Project)
+        apiRoute(app, Project)
+    })
+    .catch((err) => log(err))
 
 /* ======================================================== 
     LISTENTING

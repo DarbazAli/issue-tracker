@@ -1,5 +1,6 @@
 import mongodb from 'mongodb'
 const ObjectID = mongodb.ObjectID
+import Project from '../Project.js'
 
 const apiRoute = (app, projects) => {
     app.route('/api/issues/:project')
@@ -13,7 +14,7 @@ const apiRoute = (app, projects) => {
 
             const { title, text, creator, assignee, status } = req.body
 
-            const newIssue = {
+            const newIssue = new Project({
                 _id: new ObjectID(),
                 issue_title: title,
                 issue_text: text,
@@ -22,7 +23,7 @@ const apiRoute = (app, projects) => {
                 status_text: status == 'Open' ? true : false || null,
                 created_on: new Date().toUTCString(),
                 updated_on: new Date().toUTCString(),
-            }
+            })
 
             projects.findOneAndUpdate(
                 { name: project },
