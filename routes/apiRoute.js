@@ -3,7 +3,7 @@ const ObjectID = mongodb.ObjectID
 import Project from '../Project.js'
 
 const apiRoute = (app, Project) => {
-    app.route('/api/issues/:project')
+    app.route('/api/issues/:project?')
 
         /*================================= 
             POST ISSUES
@@ -20,7 +20,7 @@ const apiRoute = (app, Project) => {
                 issue_text: text,
                 created_by: creator || null,
                 assigned_to: assignee || null,
-                status_text: status == 'Open' ? true : false || null,
+                status: status == 'Open' ? true : false,
                 created_on: new Date().toUTCString(),
                 updated_on: new Date().toUTCString(),
             }
@@ -41,19 +41,47 @@ const apiRoute = (app, Project) => {
         ====================================*/
         .get((req, res) => {
             const { project } = req.params
-            const { status } = req.query
-            // if (status == 'open') {
-            //     Project.findOne({ name: project })
-            //         .where('issues')
-            //         .in([true])
-            //         .exec()
-            //         .then((result) => res.json(result))
-            // }
-            Project.findOne({ name: project })
-                .then((result) => {
-                    res.json(result)
-                })
-                .catch((err) => res.send(err))
+            let { open } = req.query
+
+            if (open) {
+                if (open == 'true') {
+                    Project.find(
+                        { name: project },
+                        {
+                            issues: {
+                                $elemMatch: {
+                                    status: { $eq: true },
+                                },
+                            },
+                        },
+                        (err, doc) => {
+                            if (err) res.json(err)
+                            res.json(doc)
+                        }
+                    )
+                } else {
+                    Project.find(
+                        { name: project },
+                        {
+                            issues: {
+                                $elemMatch: {
+                                    status: { $eq: false },
+                                },
+                            },
+                        },
+                        (err, doc) => {
+                            if (err) res.json(err)
+                            res.json(doc)
+                        }
+                    )
+                }
+            } else {
+                Project.findOne({ name: project })
+                    .then((result) => {
+                        res.json(result.issues)
+                    })
+                    .catch((err) => res.send(err))
+            }
         })
 
         /*================================= 
@@ -72,7 +100,7 @@ const apiRoute = (app, Project) => {
                 issue_text: text,
                 created_by: creator,
                 assigned_to: assignee || null,
-                status_text: status == 'Open' ? true : false || null,
+                status: status == 'Open' ? true : false || null,
                 updated_on: new Date().toUTCString(),
             }
 
@@ -98,7 +126,7 @@ const apiRoute = (app, Project) => {
 
             Project.updateOne(
                 { name: project },
-                { $pull: { issues: { _id: id } } },
+                { $pull: { issues: { id: id } } },
                 { new: true }
             )
 

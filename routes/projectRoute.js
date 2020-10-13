@@ -5,7 +5,7 @@ const projectRoute = (app, Project) => {
         Project.findOne({ name: project })
             .then((data) => {
                 const issues = data.issues
-                log(issues)
+                // log(issues)
                 res.render('project', { name: project, issues: issues })
             })
             .catch((err) => res.status(401).send(err))

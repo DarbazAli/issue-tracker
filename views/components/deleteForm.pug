@@ -1,3 +1,3 @@
 form(action=`/api/issues/:${name}?_method=DELETE`, method="post")
-    input(type="hidden", name="id" value=`${issue._id}`)
+    input(type="hidden", name="id" value=`${issue.id}`)
     button(type="submit") Delete
