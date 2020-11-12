@@ -65,4 +65,4 @@ mongoose
 /* ======================================================== 
     LISTENTING
 ========================================================= */
-app.listen(PORT, log(`Server running on PORT ${PORT}\n`))
+app.listen(PORT, log(`Server running on PORT ${PORT}`))

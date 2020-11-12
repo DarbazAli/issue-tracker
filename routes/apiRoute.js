@@ -3,7 +3,66 @@ const ObjectID = mongodb.ObjectID
 import Project from '../Project.js'
 
 const apiRoute = (app, Project) => {
-    app.route('/api/issues/:project?')
+    app.route('/api/issues/:project')
+
+        /*================================= 
+            GET ISSUES
+        ====================================*/
+        .get(function (req, res) {
+            var project = req.params.project
+            project = project.replace(':', '')
+
+            // db.users.find({awards: {$elemMatch: {award:'National Medal', year:1975}}})
+
+            const filter = Object.assign(req.query)
+
+            if (filter.open === 'true') {
+                filter.open = true
+            } else if (filter.open === 'false') {
+                filter.open = false
+            }
+
+            if (filter.open) {
+                // log(filter)
+
+                Project.find(
+                    { name: project },
+                    {
+                        issues: {
+                            $elemMatch: {
+                                status: true,
+                            },
+                        },
+                    },
+                    (err, docs) => {
+                        if (err) res.json(err)
+                        res.json(docs)
+                    }
+                )
+            } else if (filter.open === false) {
+                log(filter)
+
+                Project.find(
+                    { name: project },
+                    {
+                        issues: {
+                            $elemMatch: {
+                                status: false,
+                            },
+                        },
+                    },
+                    (err, docs) => {
+                        if (err) res.json(err)
+                        res.json(docs)
+                    }
+                )
+            } else {
+                Project.find({ name: project }, (err, docs) => {
+                    if (err) throw err
+                    res.json(docs)
+                })
+            }
+        })
 
         /*================================= 
             POST ISSUES
@@ -34,54 +93,6 @@ const apiRoute = (app, Project) => {
                     // res.json(doc)
                 })
                 .catch((err) => res.json(err))
-        })
-
-        /*================================= 
-            GET ISSUES
-        ====================================*/
-        .get((req, res) => {
-            const { project } = req.params
-            let { open } = req.query
-
-            if (open) {
-                if (open == 'true') {
-                    Project.find(
-                        { name: project },
-                        {
-                            issues: {
-                                $elemMatch: {
-                                    status: { $eq: true },
-                                },
-                            },
-                        },
-                        (err, doc) => {
-                            if (err) res.json(err)
-                            res.json(doc)
-                        }
-                    )
-                } else {
-                    Project.find(
-                        { name: project },
-                        {
-                            issues: {
-                                $elemMatch: {
-                                    status: { $eq: false },
-                                },
-                            },
-                        },
-                        (err, doc) => {
-                            if (err) res.json(err)
-                            res.json(doc)
-                        }
-                    )
-                }
-            } else {
-                Project.findOne({ name: project })
-                    .then((result) => {
-                        res.json(result.issues)
-                    })
-                    .catch((err) => res.send(err))
-            }
         })
 
         /*================================= 
